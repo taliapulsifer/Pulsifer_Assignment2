@@ -31,10 +31,10 @@ struct Robot {
 //Side Effects: N/A should not cause any side effects
 //Create a function findRobot that given a list of robots and an identifier, you find and 
 // return the index of the target robot.
-int findRobot(Robot* robotList, string name, int size) {
+int findRobot(Robot** robotList, string name, int size) {
 	//Use sequential search to find the Robot in the unordered array
 	for (int i = 0; i < size; i++) {
-		if (robotList[i].name == name) {
+		if (robotList[i]->name == name) {
 			return i;
 		}
 	}
@@ -79,18 +79,18 @@ void moveRobot(Robot* robot, char direction) {
 	cout << robot->name << "'s current position is: " << "(" << robot->currentX << "," << robot->currentY << ")" << endl;
 }
 
-void sortRobotList(Robot robotList[], int arraySize) {
+void sortRobotList(Robot** robotList, int arraySize) {
 	//Sort array of Robots using selection sort
 	for (int i = 0; i < arraySize; i++) {
-		Robot smallestValue = robotList[i];
+		Robot* smallestValue = robotList[i];
 		for (int j = 0; j < arraySize; j++) {
-			if (robotList[j].distanceTraveled < smallestValue.distanceTraveled) {
+			if (robotList[j]->distanceTraveled < smallestValue->distanceTraveled) {
 				smallestValue = robotList[j];
 			}
 		}
 		//Swap values
-		if (smallestValue.distanceTraveled != i) {
-			Robot temp = robotList[i];
+		if (smallestValue->distanceTraveled != i) {
+			Robot* temp = robotList[i];
 			robotList[i] = smallestValue;
 			smallestValue = temp;
 
@@ -98,12 +98,13 @@ void sortRobotList(Robot robotList[], int arraySize) {
 	}
 }
 
-//Robot** makeRobotList(int numRobos) {
-//	Robot* robotList = new Robot[numRobos];
-//	for (int i = 0; i < numRobos; i++) {
-//		robotList[i] = new Robot;
-//	}
-//}
+Robot** makeRobotList(int numRobos) {
+	Robot** robotList = new Robot*[numRobos];
+	for (int i = 0; i < numRobos; i++) {
+		robotList[i] = new Robot;
+	}
+	return robotList;
+}
 
 int main()
 {
@@ -120,13 +121,14 @@ int main()
 	cin >> arraySize;
 	//Create an array with the same size as the user entered
 	//Robot** robotList[] = makeRobotList(arraySize);
-	Robot* robotList = new Robot[arraySize];
+	//Robot* robotList = new Robot[arraySize];
+	Robot** robotList = makeRobotList(arraySize);
 	//For each Robot in the array, the user enters a name. 
 	cout << "Please enter " << arraySize << " names." << endl;
 	for (int i = 0; i < arraySize; i++) {
 		string robotName;
 		cin >> robotName;
-		robotList[i].name = robotName;
+		robotList[i]->name = robotName;
 	}
 
 	//Check that all names are added to list
@@ -159,9 +161,9 @@ int main()
 				//While the user wants to move display the movement options
 				cout << "Great! We are moving the Robot " << robotIdentifier << endl;
 				//Displaying the current pos for the target robot
-				cout << robotList[robotIndex].name << "'s current position is "
-					<< "(" << robotList[robotIndex].currentX << ","
-					<< robotList[robotIndex].currentY << ")" << endl;
+				cout << robotList[robotIndex]->name << "'s current position is "
+					<< "(" << robotList[robotIndex]->currentX << ","
+					<< robotList[robotIndex]->currentY << ")" << endl;
 				//Menu for moving the robot
 				cout << "Here are your options to move the Robot: " << endl
 					<< "U - Move the Robot up" << endl
@@ -171,7 +173,7 @@ int main()
 					<< "Which direction would you like to move?" << endl;
 				cin >> direction;
 				//Move robot with the direction provided by user
-				moveRobot(&robotList[robotIndex], direction);
+				moveRobot(robotList[robotIndex], direction);
 				//moveRobot(robotList+robotIndex, direction);
 
 				break;
@@ -181,7 +183,7 @@ int main()
 			//Sort robotList first
 			sortRobotList(robotList, arraySize);
 			for (int j = 0; j < arraySize; j++) {
-				cout << robotList[j].name << " " << robotList[j].distanceTraveled << endl;
+				cout << robotList[j]->name << " " << robotList[j]->distanceTraveled << endl;
 			}
 			break;
 		case 'Q':
@@ -198,3 +200,4 @@ int main()
 	return 0;
 }
 
+// :)
