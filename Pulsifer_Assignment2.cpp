@@ -47,13 +47,24 @@ int findRobot(Robot** robotList, string name, int size) {
 //Create a function moveRobot that updates the position of the specified robot by current speed.
 void moveRobot(Robot* robot, char direction) {
 	//If this command is the same as the last command, speed increases
+	direction = toupper(direction);
+	char directions[] = { 'U', 'D', 'L', 'R' }; 
+	char* directionsEnd = directions + sizeof(directions);
+	//See if the direction is in the options
+	if (directionsEnd == find(directions, directionsEnd, direction)) {
+		cout << "Sorry, that was an invalid direction. Please try again" << endl;
+		return;
+	}
 
-	if (toupper(direction) == toupper(robot->lastCommand) && robot->currentSpeed < 5) {
-		robot->currentSpeed += 1;
+	if (direction == robot->lastCommand){
+		if (robot->currentSpeed <= 4) {
+			robot->currentSpeed += 1;
+		}
 	}
 	else {
 		robot->currentSpeed = 1;
 	}
+
 	switch (toupper(direction)) {
 		//Check the command and move accordingly
 	case 'U':
@@ -68,9 +79,6 @@ void moveRobot(Robot* robot, char direction) {
 	case 'R':
 		robot->currentX += robot->currentSpeed;
 		break;
-	default:
-		cout << "Sorry, that was an invalid direction. Please try again" << endl;
-		return;
 	}
 	//Update the distance traveled based on speed
 	robot->distanceTraveled += robot->currentSpeed;
@@ -196,9 +204,11 @@ int main()
 		}
 	}
 	//Have to delete when using keyword 'new'
+	for (int i = 0; i < arraySize; i++) {
+		delete robotList[i];
+	}
 	delete[] robotList;
 	//Main always returns 0
 	return 0;
 }
 
-// :)
