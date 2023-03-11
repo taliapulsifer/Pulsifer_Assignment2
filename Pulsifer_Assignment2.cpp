@@ -48,7 +48,7 @@ int findRobot(Robot** robotList, string name, int size) {
 void moveRobot(Robot* robot, char direction) {
 	//If this command is the same as the last command, speed increases
 
-	if (toupper(direction) == toupper(robot->lastCommand) && robot->currentSpeed <= 4) {
+	if (toupper(direction) == toupper(robot->lastCommand) && robot->currentSpeed < 5) {
 		robot->currentSpeed += 1;
 	}
 	else {
@@ -70,10 +70,11 @@ void moveRobot(Robot* robot, char direction) {
 		break;
 	default:
 		cout << "Sorry, that was an invalid direction. Please try again" << endl;
+		return;
 	}
 	//Update the distance traveled based on speed
 	robot->distanceTraveled += robot->currentSpeed;
-	//update lastcommand for the robot
+	//update lastcommand for the robot unless it was an invalid command!!!
 	robot->lastCommand = direction;
 	//Print Robot's location (X, Y)
 	cout << robot->name << "'s current position is: " << "(" << robot->currentX << "," << robot->currentY << ")" << endl;
