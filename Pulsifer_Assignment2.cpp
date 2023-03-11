@@ -56,7 +56,6 @@ void moveRobot(Robot* robot, char direction) {
 		cout << "Sorry, that was an invalid direction. Please try again" << endl;
 		return;
 	}
-
 	if (direction == robot->lastCommand){
 		if (robot->currentSpeed < 4) {
 			robot->currentSpeed += 1;
@@ -65,7 +64,6 @@ void moveRobot(Robot* robot, char direction) {
 	else {
 		robot->currentSpeed = 1;
 	}
-
 	switch (toupper(direction)) {
 		//Check the command and move accordingly
 	case 'U':
@@ -92,19 +90,14 @@ void moveRobot(Robot* robot, char direction) {
 void sortRobotList(Robot** robotList, int arraySize) {
 	//Sort array of Robots using selection sort
 	for (int i = 0; i < arraySize - 1; i++) {
-		Robot* largestValue = robotList[i];
+		int maxIndex = i;
 		for (int j = i; j < arraySize; j++) {
-			if (robotList[j]->distanceTraveled > largestValue->distanceTraveled) {
-				largestValue = robotList[j];
+			if (robotList[j]->distanceTraveled > robotList[maxIndex]->distanceTraveled) {
+				maxIndex = j;
 			}
 		}
 		//Swap values
-		if (largestValue->distanceTraveled != robotList[i]->distanceTraveled) {
-			Robot* temp = robotList[i];
-			robotList[i] = largestValue;
-			largestValue = temp;
-
-		}
+		swap(robotList[i], robotList[maxIndex]);
 	}
 }
 
@@ -142,11 +135,6 @@ int main()
 		robotList[i]->name = robotName;
 	}
 
-	//Check that all names are added to list
-	//for (int k = 0; k < arraySize; k++) {
-	//	cout << robotList[k].name << endl;
-	//}
-
 	//While the user has not entered Q
 	while (running) {
 		//Display main Menu
@@ -183,10 +171,9 @@ int main()
 					<< "R - Move the Robot right" << endl
 					<< "Which direction would you like to move?" << endl;
 				cin >> direction;
+				
 				//Move robot with the direction provided by user
 				moveRobot(robotList[robotIndex], direction);
-				//moveRobot(robotList+robotIndex, direction);
-
 				break;
 			}
 		case 'D':
@@ -196,9 +183,7 @@ int main()
 			for_each(robotList, robotListEnd, [](Robot* robot) {
 				cout << robot->name << " " << robot->distanceTraveled << endl;
 				});
-			/*for (int j = 0; j < arraySize; j++) {
-				cout << robotList[j]->name << " " << robotList[j]->distanceTraveled << endl;
-			}*/
+
 			break;
 		case 'Q':
 			running = false;
@@ -219,4 +204,3 @@ int main()
 	//Main always returns 0
 	return 0;
 }
-
