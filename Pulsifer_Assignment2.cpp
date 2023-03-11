@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include<ctype.h>
+#include<algorithm>
 using namespace std;
 
 //Name: Robot
@@ -132,6 +133,7 @@ int main()
 	//Robot** robotList[] = makeRobotList(arraySize);
 	//Robot* robotList = new Robot[arraySize];
 	Robot** robotList = makeRobotList(arraySize);
+	Robot** robotListEnd = robotList + arraySize;
 	//For each Robot in the array, the user enters a name. 
 	cout << "Please enter " << arraySize << " names." << endl;
 	for (int i = 0; i < arraySize; i++) {
@@ -204,9 +206,12 @@ int main()
 		}
 	}
 	//Have to delete when using keyword 'new'
-	for (int i = 0; i < arraySize; i++) {
-		delete robotList[i];
-	}
+	//for(int i = 0; i < arraySize; i++) {
+	//	delete robotList[i];
+	//}
+	for_each(robotList, robotListEnd, [](Robot* robot) {
+		delete robot;
+		});
 	delete[] robotList;
 	//Main always returns 0
 	return 0;
