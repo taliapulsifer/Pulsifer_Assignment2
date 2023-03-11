@@ -25,7 +25,7 @@ struct Robot {
 		lastCommand = 'Z';
 	}
 };
-//:)
+
 //Name: findRobot
 //Parameters: Array of Robots pointers robotList[], unique identifier name, size of array
 //Side Effects: N/A should not cause any side effects
@@ -48,7 +48,7 @@ int findRobot(Robot* robotList, string name, int size) {
 void moveRobot(Robot* robot, char direction) {
 	//If this command is the same as the last command, speed increases
 
-	if (direction == robot->lastCommand && robot->currentSpeed <= 4) {
+	if (toupper(direction) == toupper(robot->lastCommand) && robot->currentSpeed <= 4) {
 		robot->currentSpeed += 1;
 	}
 	else {
@@ -75,6 +75,8 @@ void moveRobot(Robot* robot, char direction) {
 	robot->distanceTraveled += robot->currentSpeed;
 	//update lastcommand for the robot
 	robot->lastCommand = direction;
+	//Print Robot's location (X, Y)
+	cout << robot->name << "'s current position is: " << "(" << robot->currentX << "," << robot->currentY << ")" << endl;
 }
 
 void sortRobotList(Robot robotList[], int arraySize) {
@@ -96,13 +98,11 @@ void sortRobotList(Robot robotList[], int arraySize) {
 	}
 }
 
-//Name: makeRoboList
-//Parameters: numRobos, the number of indexes or robots
-//Side Effects: N/A
-//The list of robots should be creatred in this function. The list should be of whatever 
-//length the user specifies.
 //Robot** makeRobotList(int numRobos) {
 //	Robot* robotList = new Robot[numRobos];
+//	for (int i = 0; i < numRobos; i++) {
+//		robotList[i] = new Robot;
+//	}
 //}
 
 int main()
@@ -170,10 +170,6 @@ int main()
 					<< "R - Move the Robot right" << endl
 					<< "Which direction would you like to move?" << endl;
 				cin >> direction;
-				//Check if they don't want to move the robot anymore
-				if (toupper(direction) == 'E') {
-					break;
-				}
 				//Move robot with the direction provided by user
 				moveRobot(&robotList[robotIndex], direction);
 				//moveRobot(robotList+robotIndex, direction);
