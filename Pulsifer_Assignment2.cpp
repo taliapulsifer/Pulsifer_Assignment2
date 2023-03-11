@@ -58,7 +58,7 @@ void moveRobot(Robot* robot, char direction) {
 	}
 
 	if (direction == robot->lastCommand){
-		if (robot->currentSpeed <= 4) {
+		if (robot->currentSpeed < 4) {
 			robot->currentSpeed += 1;
 		}
 	}
@@ -91,18 +91,18 @@ void moveRobot(Robot* robot, char direction) {
 
 void sortRobotList(Robot** robotList, int arraySize) {
 	//Sort array of Robots using selection sort
-	for (int i = 0; i < arraySize; i++) {
-		Robot* smallestValue = robotList[i];
-		for (int j = 0; j < arraySize; j++) {
-			if (robotList[j]->distanceTraveled < smallestValue->distanceTraveled) {
-				smallestValue = robotList[j];
+	for (int i = 0; i < arraySize - 1; i++) {
+		Robot* largestValue = robotList[i];
+		for (int j = i; j < arraySize; j++) {
+			if (robotList[j]->distanceTraveled > largestValue->distanceTraveled) {
+				largestValue = robotList[j];
 			}
 		}
 		//Swap values
-		if (smallestValue->distanceTraveled != i) {
+		if (largestValue->distanceTraveled != robotList[i]->distanceTraveled) {
 			Robot* temp = robotList[i];
-			robotList[i] = smallestValue;
-			smallestValue = temp;
+			robotList[i] = largestValue;
+			largestValue = temp;
 
 		}
 	}
@@ -193,9 +193,12 @@ int main()
 			//for each robot in the array, print the robot name and the distance it has traveled
 			//Sort robotList first
 			sortRobotList(robotList, arraySize);
-			for (int j = 0; j < arraySize; j++) {
+			for_each(robotList, robotListEnd, [](Robot* robot) {
+				cout << robot->name << " " << robot->distanceTraveled << endl;
+				});
+			/*for (int j = 0; j < arraySize; j++) {
 				cout << robotList[j]->name << " " << robotList[j]->distanceTraveled << endl;
-			}
+			}*/
 			break;
 		case 'Q':
 			running = false;
